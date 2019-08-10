@@ -1,67 +1,60 @@
 package Algorithms;
 
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class CircularRotation {
 
-    protected static boolean outOfRange;
-
-    protected static int moved = 0;
-
-    static int[] circularArrayRotation(int[] a, int[] m, int k) {
-        int temp;
-        int idx = 0;
-        int x;
-        int nextIdx;
-        while(moved < a.length){
-            temp = a[idx];
-//            outOfRange = false;
-//            while (!outOfRange) {
-                nextIdx = getNextIdx(idx, k, a.length);
-                x = a[nextIdx];
-                a[nextIdx] = temp;
-                temp = x;
-                idx = nextIdx;
-//            }
+    // Complete the circularArrayRotation function below.
+    static int[] circularArrayRotation(int[] a, int k, int[] queries) {
+        int[] rotated = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            rotated[((i + (k % a.length)) % a.length)] = a[i];
         }
 
-        System.out.println(Arrays.toString(a));
-
-        int[] cos = new int[2];
-        return cos;
-    }
-
-    public static int getNextIdx(int idx, int k, int n) {
-        idx += k;
-        if (idx > n - 1) {
-            outOfRange = true;
-            return Math.abs(n - idx);
+        for (int i = 0; i < queries.length; i++) {
+            queries[i] = rotated[queries[i]];
         }
 
-        return idx;
+        return queries;
     }
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int n = in.nextInt();
-        int k = in.nextInt();
-        int q = in.nextInt();
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        String[] nkq = scanner.nextLine().split(" ");
+        int n = Integer.parseInt(nkq[0]);
+        int k = Integer.parseInt(nkq[1]);
+        int q = Integer.parseInt(nkq[2]);
         int[] a = new int[n];
-        for (int a_i = 0; a_i < n; a_i++) {
-            a[a_i] = in.nextInt();
+
+        String[] aItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < n; i++) {
+            int aItem = Integer.parseInt(aItems[i]);
+            a[i] = aItem;
         }
-        int[] m = new int[q];
-        for (int m_i = 0; m_i < q; m_i++) {
-            m[m_i] = in.nextInt();
+
+        int[] queries = new int[q];
+        for (int i = 0; i < q; i++) {
+            int queriesItem = scanner.nextInt();
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+            queries[i] = queriesItem;
         }
-        int[] result = circularArrayRotation(a, m, k);
+
+        int[] result = circularArrayRotation(a, k, queries);
         for (int i = 0; i < result.length; i++) {
-            System.out.print(result[i] + (i != result.length - 1 ? "\n" : ""));
+            bufferedWriter.write(String.valueOf(result[i]));
+            if (i != result.length - 1) {
+                bufferedWriter.write("\n");
+            }
         }
-        System.out.println("");
 
-
-        in.close();
+        bufferedWriter.newLine();
+        bufferedWriter.close();
+        scanner.close();
     }
 }
